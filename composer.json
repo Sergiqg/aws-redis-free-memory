@@ -1,0 +1,36 @@
+{
+    "name": "sergiqg/aws-redis-free-memory",
+    "description": "Get the free memory of a redis cluster",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "AWS",
+        "Elasticache",
+        "Redis",
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergi Quiñonero",
+            "email": "sergi.q@pa-community.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sergiqg\\AwsRedisFreeMemory\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": "~7.1",
+        "illuminate/support": "~5.6",
+        "aws/aws-sdk-php": "^3.19"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sergiqg\\AwsRedisFreeMemory\\AwsRedisFreeMemoryProvider"
+            ]
+        }
+    }
+}
