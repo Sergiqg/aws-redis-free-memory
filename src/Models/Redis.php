@@ -91,22 +91,23 @@ class Redis
             $this->start_time = $this->start_time ? : Carbon::now()->subMinute(1);
             $this->end_time   = $this->end_time ? : Carbon::now();
             $cloud_watch      = new CloudWatchClient($this->connection_configuration);
-            $this->response   = $cloud_watch->getMetricStatistics(
-                [
-                    'Namespace'  => 'AWS/ElastiCache',
-                    'MetricName' => 'FreeableMemory',
-                    'Statistics' => [ 'Minimum' ],
-                    'StartTime'  => $this->start_time->format('c'),
-                    'EndTime'    => $this->end_time->format('c'),
-                    'Period'     => $this->period,
-                    'Dimensions' => [
-                        [
-                            'Name'  => 'CacheClusterId',
-                            'Value' => $this->cluster_id,
-                        ],
+            $request_params   = [
+                'Namespace'  => 'AWS/ElastiCache',
+                'MetricName' => 'FreeableMemory',
+                'Statistics' => [ 'Minimum' ],
+                'StartTime'  => $this->start_time->format('c'),
+                'EndTime'    => $this->end_time->format('c'),
+                'Period'     => $this->period,
+                'Dimensions' => [
+                    [
+                        'Name'  => 'CacheClusterId',
+                        'Value' => $this->cluster_id,
                     ],
-                ]
-            );
+                ],
+            ];
+            \Log::debug('Request: ' . var_export($request_params, true));
+            $this->response = $cloud_watch->getMetricStatistics($request_params);
+            \Log::debug('Response: ' . var_export($this->response, true));
 
             return $this;
         } catch (\Exception $e) {
@@ -219,5 +220,5 @@ class Redis
         $this->cluster_id = $cluster_id;
 
         return $this;
-}
+    }
 }
