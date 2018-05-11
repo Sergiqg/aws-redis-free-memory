@@ -91,8 +91,8 @@ class Redis
     {
         $this->setConnectionConfiguration();
 
-        $this->start_time ? : Carbon::now()->subMinute(1)->format('c');
-        $this->end_time ? : Carbon::now()->format('c');
+        $this->start_time = $this->start_time ? : Carbon::now()->subMinute(1);
+        $this->end_time   = $this->end_time ? : Carbon::now();
 
         $cloud_watch    = new CloudWatchClient($this->connection_configuration);
         $this->response = $cloud_watch->getMetricStatistics(
@@ -100,7 +100,7 @@ class Redis
                 'Namespace'  => 'AWS/ElastiCache',
                 'MetricName' => 'FreeableMemory',
                 'Statistics' => [ 'Minimum' ],
-                'StartTime'  => $this->start_time->subMinute(1)->format('c'),
+                'StartTime'  => $this->start_time->format('c'),
                 'EndTime'    => $this->end_time->format('c'),
                 'Period'     => 3600,
                 'Dimensions' => [
