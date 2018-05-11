@@ -86,51 +86,60 @@ class Redis
      * Process the cloudwatch metric.
      *
      * @return \Sergiqg\AwsRedisFreeMemory\Models\Redis
+     * @throws \Exception
      */
     public function processCloudWatch(): Redis
     {
-        $this->setConnectionConfiguration();
 
-        $this->start_time = $this->start_time ? : Carbon::now()->subMinute(1);
-        $this->end_time   = $this->end_time ? : Carbon::now();
-
-        $cloud_watch    = new CloudWatchClient($this->connection_configuration);
-        $this->response = $cloud_watch->getMetricStatistics(
-            [
-                'Namespace'  => 'AWS/ElastiCache',
-                'MetricName' => 'FreeableMemory',
-                'Statistics' => [ 'Minimum' ],
-                'StartTime'  => $this->start_time->format('c'),
-                'EndTime'    => $this->end_time->format('c'),
-                'Period'     => 3600,
-                'Dimensions' => [
-                    [
-                        'Name'  => 'CacheClusterId',
-                        'Value' => 'cache',
+        try {
+            $this->setConnectionConfiguration();
+            $this->start_time = $this->start_time ? : Carbon::now()->subMinute(1);
+            $this->end_time   = $this->end_time ? : Carbon::now();
+            $cloud_watch      = new CloudWatchClient($this->connection_configuration);
+            $this->response   = $cloud_watch->getMetricStatistics(
+                [
+                    'Namespace'  => 'AWS/ElastiCache',
+                    'MetricName' => 'FreeableMemory',
+                    'Statistics' => [ 'Minimum' ],
+                    'StartTime'  => $this->start_time->format('c'),
+                    'EndTime'    => $this->end_time->format('c'),
+                    'Period'     => 3600,
+                    'Dimensions' => [
+                        [
+                            'Name'  => 'CacheClusterId',
+                            'Value' => 'cache',
+                        ],
                     ],
-                ],
-            ]
-        );
+                ]
+            );
 
-        return $this;
+            return $this;
+        } catch (\Exception $e) {
+            throw new \Exception("Unable to connect. " . $e->getMessage());
+        }
     }
 
     /**
      * Gets the free memory in bytes.
      *
      * @return int
+     * @throws \Exception
      */
     public function getFreeMemory(): int
     {
-        if (!$this->response) $this->processCloudWatch();
 
-        $total_free_memory = 0;
-        $datapoints        = $this->response->get('Datapoints');
-        foreach ($datapoints as $datapoint) {
-            $total_free_memory += $datapoint[ 'Minimum' ];
+        try {
+            if (!$this->response) $this->processCloudWatch();
+            $total_free_memory = 0;
+            $datapoints        = $this->response->get('Datapoints');
+            foreach ($datapoints as $datapoint) {
+                $total_free_memory += $datapoint[ 'Minimum' ];
+            }
+
+            return $total_free_memory;
+        } catch (\Exception $e) {
+            throw new \Exception('Unable to resolve getFreememory. ' . $e->getMessage());
         }
-
-        return $total_free_memory;
     }
 
     /**
