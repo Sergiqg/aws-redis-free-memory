@@ -6,7 +6,7 @@
         "laravel",
         "AWS",
         "Elasticache",
-        "Redis",
+        "Redis"
     ],
     "license": "MIT",
     "authors": [
