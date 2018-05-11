@@ -4,7 +4,7 @@ namespace Sergiqg\AwsRedisFreeMemory;
 
 use \Illuminate\Support\ServiceProvider;
 
-class ElbRedisFreeMemoryProvider extends ServiceProvider
+class AwsRedisFreeMemoryProvider extends ServiceProvider
 {
     /**
      * Register de Service Provider
