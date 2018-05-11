@@ -51,14 +51,9 @@ class Redis
     protected $period = 3600;
 
     /**
-     * @var array
+     * @var string
      */
-    protected $dimensions = [
-        [
-            'Name'  => 'CacheClusterId',
-            'Value' => 'cache',
-        ],
-    ];
+    protected $cluster_id = 'my-cluster-id';
 
     /**
      * @param array $configuration
@@ -103,11 +98,11 @@ class Redis
                     'Statistics' => [ 'Minimum' ],
                     'StartTime'  => $this->start_time->format('c'),
                     'EndTime'    => $this->end_time->format('c'),
-                    'Period'     => 3600,
+                    'Period'     => $this->period,
                     'Dimensions' => [
                         [
                             'Name'  => 'CacheClusterId',
-                            'Value' => 'cache',
+                            'Value' => $this->cluster_id,
                         ],
                     ],
                 ]
@@ -215,14 +210,14 @@ class Redis
     }
 
     /**
-     * @param array $dimensions
+     * @param string $cluster_id
      *
-     * @return \Sergiqg\AwsRedisFreeMemory\Models\Redis
+     * @return Redis
      */
-    public function setDimensions(array $dimensions): Redis
+    public function setClusterId(string $cluster_id): Redis
     {
-        $this->dimensions = $dimensions;
+        $this->cluster_id = $cluster_id;
 
         return $this;
-    }
+}
 }
