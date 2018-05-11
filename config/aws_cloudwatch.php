@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'version'         => env('AWS_ELB_VERSION', 'latest'),
+    'version'         => env('AWS_VERSION', 'latest'),
 
     /*
     |--------------------------------------------------------------------------
@@ -10,11 +10,10 @@ return [
     |
     | The ELB default information
     */
-    'name'        => env('AWS_ELB_NAME', 'my-default-elb-name'),
-    'region'      => env('AWS_ELB_REGION', 'my-default-region'),
+    'region'      => env('AWS_CLOUDWATCH_REGION', 'my-default-region'),
     'credentials' => [
-        'key'    => env('AWS_ELB_KEY', 'my-elb-key'),
-        'secret' => env('AWS_ELB_SECRET', 'my-elb-secret'),
+        'key'    => env('AWS_CLOUDWATCH_KEY', 'my-cloudwatch-key'),
+        'secret' => env('AWS_CLOUDWATCH_SECRET', 'my-cloudwatch-secret'),
     ],
 
 ];
