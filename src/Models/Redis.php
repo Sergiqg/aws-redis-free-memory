@@ -64,11 +64,11 @@ class Redis
     {
         $this->connection_configuration = array_merge(
             [
-                'version'     => config('aws_elb_instance_detector.version'),
-                'region'      => config('aws_elb_instance_detector.region'),
+                'version'     => config('aws_cloudwatch.version'),
+                'region'      => config('aws_cloudwatch.region'),
                 'credentials' => [
-                    'key'    => config('aws_elb_instance_detector.credentials.key'),
-                    'secret' => config('aws_elb_instance_detector.credentials.secret'),
+                    'key'    => config('aws_cloudwatch.credentials.key'),
+                    'secret' => config('aws_cloudwatch.credentials.secret'),
                 ],
             ],
             $configuration
