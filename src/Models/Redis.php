@@ -53,7 +53,7 @@ class Redis
     /**
      * @var string
      */
-    protected $cluster_id = 'my-cluster-id';
+    protected $cluster_id = null;
 
     /**
      * @param array $configuration
@@ -88,6 +88,7 @@ class Redis
 
         try {
             $this->setConnectionConfiguration();
+            $this->cluster_id ? : $this->setClusterId(config('aws_cloudwatch.cluster_id'));
             $this->start_time = $this->start_time ? : Carbon::now()->subMinute(1);
             $this->end_time   = $this->end_time ? : Carbon::now();
             $cloud_watch      = new CloudWatchClient($this->connection_configuration);

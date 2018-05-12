@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'version'         => env('AWS_VERSION', 'latest'),
+    'version'     => env('AWS_VERSION', 'latest'),
+    'cluster_id'  => env('AWS_REDIS_CLUSTER_ID'),
 
     /*
     |--------------------------------------------------------------------------
